@@ -31,8 +31,8 @@ public:
     Serial();
     ~Serial();
     /* Arduino micro: VID = 9025, PID = 32823*/
-    static const quint16 JRD_vendor_id = 9025;
-    static const quint16 JRD_product_id = 32823;
+    static const quint16 JRD_vendor_id = 4292;
+    static const quint16 JRD_product_id = 60000;
     bool JRD_is_available = false;
     QString JRD_port_name;
 

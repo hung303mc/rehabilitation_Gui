@@ -51,5 +51,5 @@ void Player::test()
     if(y_player > 100)y_player = 100;
     y_player = 410-y_player*410/100;
     game->player->setPos(game->player->x(),y_player);
-    qDebug()<<y_player;
+//    qDebug()<<y_player;
 }

@@ -94,7 +94,7 @@ void Serial::setupSerialPort()
         SerialTimer = new QTimer();
         connect(SerialTimer,SIGNAL(timeout()),this,SLOT(serialReceived()));
         //        connect(serialPort,SIGNAL(readyRead()),this,SLOT(serialReceived()));
-
+        SerialTimer->start(100);
     }
     else{
         qDebug() <<" couldn't find serial port" << "\n";
@@ -106,7 +106,7 @@ void Serial::setupSerialPort()
 void Serial::serialReceived()
 {
     /*Readall() doesn't gurantee read all message so it need buffer*/
-    serialSplitBuffer = serialRawBuffer.split("\r\n");
+    serialSplitBuffer = serialRawBuffer.split("\n");
     if(serialSplitBuffer.length()<3){
         serialRawData = serialPort->readAll();
         serialRawBuffer = serialRawBuffer + QString::fromStdString(serialRawData.toStdString());
