@@ -73,8 +73,11 @@ void Serial::setupSerialPort()
         //  check if the serialport has both a product identifier and a vendor identifier
         if(serialPortInfo.hasProductIdentifier() && serialPortInfo.hasVendorIdentifier()){
             //  check if the product ID and the vendor ID match those of the arduino uno
-            if((serialPortInfo.productIdentifier() == JRD_product_id)
-                    && (serialPortInfo.vendorIdentifier() == JRD_vendor_id)){
+            if (((serialPortInfo.productIdentifier() == JRD_PID)
+               &&(serialPortInfo.vendorIdentifier() == JRD_VID))
+               ||((serialPortInfo.productIdentifier() == TEST_PID)
+               &&(serialPortInfo.vendorIdentifier() == TEST_VID)))
+            {
                 JRD_is_available = true; //    arduino uno is available on this port
                 JRD_port_name = serialPortInfo.portName();
             }
