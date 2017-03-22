@@ -55,16 +55,14 @@ void Serial::setupSerialPort()
      *
      *
      */
-//    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "\n";
-//    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-//        qDebug() << "Description: " << serialPortInfo.description() << "\n";
-//        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "\n";
-//        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "\n";
-//        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "\n";
-//        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
-//        qDebug() << JRD_product_id << "\n";
-//        qDebug() << JRD_vendor_id << "\n";
-//    }
+    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "\n";
+    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
+        qDebug() << "Description: " << serialPortInfo.description() << "\n";
+        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "\n";
+        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "\n";
+        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "\n";
+        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
+    }
 
     /*
     *  For each available serial port
@@ -109,7 +107,7 @@ void Serial::setupSerialPort()
 void Serial::serialReceived()
 {
     /*Readall() doesn't gurantee read all message so it need buffer*/
-    serialSplitBuffer = serialRawBuffer.split("\n");
+    serialSplitBuffer = serialRawBuffer.split("\r\n");
     if(serialSplitBuffer.length()<3){
         serialRawData = serialPort->readAll();
         serialRawBuffer = serialRawBuffer + QString::fromStdString(serialRawData.toStdString());
