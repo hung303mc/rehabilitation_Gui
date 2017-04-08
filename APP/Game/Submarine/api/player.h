@@ -12,11 +12,8 @@ class Player: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     Player(QGraphicsItem * parent = 0);
-    void keyPressEvent(QKeyEvent *event);
-private:
 public slots:
-    void spawn();
-    void test();
+    void updatePos();
 };
 
 

@@ -16,12 +16,11 @@ public:
     QGraphicsScene * scene2;
     QGraphicsScene * sceneStart;
     Player * player;
-    Score *score;
+    Score  * score;
     Health * health;
-    int StateCollide;
     QTimer * timerEnemy;
     QTimer * timerOver;
-    QTimer * timerTest;
+    QTimer * timerPlayer;
     Serial * myserial;
 
 public slots:
@@ -33,7 +32,7 @@ public slots:
     void mybuttonClick4();
     void mybuttonClick5();
     void mybuttonClick6();
-
+    void spawnEnemy();
 private:
 };
 

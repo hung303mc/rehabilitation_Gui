@@ -29,16 +29,20 @@ void Friend::move()
 {
     // set position
     setPos(x()-5,y());
+    // if friend out of scene, destroy enemy
+    if(pos().x()<0)
+    {
+        scene()->removeItem(this);
+        delete this;
+    }
     // If player meet Friend -> score ++
     QList<QGraphicsItem *> collide_item = collidingItems();
     for(int i=0, n= collide_item.size(); i<n;i++){
-
         if(typeid(* collide_item[i]) == typeid(Player)){
             //Decrease the health
             game->score->increase();
-            // Remove enemy
+            //Remove item
             scene()->removeItem(this);
-            // Delete enemy
             delete this;
             return;
         }

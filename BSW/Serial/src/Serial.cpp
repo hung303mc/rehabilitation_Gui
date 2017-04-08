@@ -55,16 +55,14 @@ void Serial::setupSerialPort()
      *
      *
      */
-//    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "\n";
-//    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
-//        qDebug() << "Description: " << serialPortInfo.description() << "\n";
-//        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "\n";
-//        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "\n";
-//        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "\n";
-//        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
-//        qDebug() << JRD_product_id << "\n";
-//        qDebug() << JRD_vendor_id << "\n";
-//    }
+    qDebug() << "Number of ports: " << QSerialPortInfo::availablePorts().length() << "\n";
+    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()){
+        qDebug() << "Description: " << serialPortInfo.description() << "\n";
+        qDebug() << "Has vendor id?: " << serialPortInfo.hasVendorIdentifier() << "\n";
+        qDebug() << "Vendor ID: " << serialPortInfo.vendorIdentifier() << "\n";
+        qDebug() << "Has product id?: " << serialPortInfo.hasProductIdentifier() << "\n";
+        qDebug() << "Product ID: " << serialPortInfo.productIdentifier() << "\n";
+    }
 
     /*
     *  For each available serial port
@@ -73,8 +71,11 @@ void Serial::setupSerialPort()
         //  check if the serialport has both a product identifier and a vendor identifier
         if(serialPortInfo.hasProductIdentifier() && serialPortInfo.hasVendorIdentifier()){
             //  check if the product ID and the vendor ID match those of the arduino uno
-            if((serialPortInfo.productIdentifier() == JRD_product_id)
-                    && (serialPortInfo.vendorIdentifier() == JRD_vendor_id)){
+            if (((serialPortInfo.productIdentifier() == JRD_PID)
+               &&(serialPortInfo.vendorIdentifier() == JRD_VID))
+               ||((serialPortInfo.productIdentifier() == TEST_PID)
+               &&(serialPortInfo.vendorIdentifier() == TEST_VID)))
+            {
                 JRD_is_available = true; //    arduino uno is available on this port
                 JRD_port_name = serialPortInfo.portName();
             }
@@ -94,7 +95,7 @@ void Serial::setupSerialPort()
         SerialTimer = new QTimer();
         connect(SerialTimer,SIGNAL(timeout()),this,SLOT(serialReceived()));
         //        connect(serialPort,SIGNAL(readyRead()),this,SLOT(serialReceived()));
-
+        SerialTimer->start(100);
     }
     else{
         qDebug() <<" couldn't find serial port" << "\n";

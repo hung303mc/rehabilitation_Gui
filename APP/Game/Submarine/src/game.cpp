@@ -12,7 +12,8 @@
 #include "dialog.h"
 #include <QLabel>
 #include "Serial.h"
-
+#include "enemy.h"
+#include "friend.h"
 
 /*
     Add scene:  add player into it
@@ -38,12 +39,9 @@ Game::Game()
     /**************
     *   Scene game
     **************/
-    // add player item + player to scene
+    // add player
     player = new Player();
     scene->addItem(player);
-    // make player focusable 
-    player->setFlags(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
     player->setPos(width()/2 - player->pixmap().width()/2,
                    height()/2 - player->pixmap().height()/2);
 
@@ -56,30 +54,20 @@ Game::Game()
     health->setPos(health->x(), health->y()+25);
     scene->addItem(health);
 
-    // spawn enemy
+    // connect timer to create Enemy & Friend
     timerEnemy = new QTimer();
-    QObject::connect(timerEnemy,SIGNAL(timeout()),player,SLOT(spawn()));
+    QObject::connect(timerEnemy,SIGNAL(timeout()),this,SLOT(spawnEnemy()));
 
+    // connect timer to update player
+    timerPlayer = new QTimer();
+    QObject::connect(timerPlayer,SIGNAL(timeout()),player,SLOT(updatePos()));
 
     // Setting timer for GameOver
     timerOver = new QTimer();
     QObject::connect(timerOver,SIGNAL(timeout()),this,SLOT(gameOver()));
 
-    //add Arduino Serialport
-//    arduino = new MySerial();
-//    qDebug() <<"serial port: "<< arduino->portName();
-//    QObject::connect(arduino,SIGNAL(readyRead()),arduino,SLOT(readSerial()));
-    timerTest = new QTimer();
-    QObject::connect(timerTest,SIGNAL(timeout()),player,SLOT(test()));
-
-    // add Serial test 2
+    // add Serial test
     myserial = new Serial();
-
-    // play back ground music
-//    QMediaPlayer * music = new QMediaPlayer();
-//    music->setMedia(QUrl("qrc:/sound/noemotion.mp3"));
-//    music->play();
-//    show();
 }
 
 void Game::gameStart()
@@ -87,7 +75,7 @@ void Game::gameStart()
     setScene(scene);
     timerEnemy->start(5000);
     //timerOver->start(1000*60);
-    timerTest->start(50);
+    timerPlayer->start(50);
 }
 
 void Game::gameOver()
@@ -95,7 +83,7 @@ void Game::gameOver()
     timerEnemy->stop();
     setScene(scene2);
     timerOver->stop();
-    timerTest->stop();
+    timerPlayer->stop();
 
     Dialog * DialogOver = new Dialog();
     QLabel * labelOver = new QLabel();
@@ -127,10 +115,30 @@ void Game::mybuttonClick4()
 
 void Game::mybuttonClick5()
 {
-myserial->sendCommand(5);
+    myserial->sendCommand(5);
 }
 
 void Game::mybuttonClick6()
 {
-myserial->sendCommand(6);
+    myserial->sendCommand(6);
+}
+
+void Game::spawnEnemy()
+{
+    // set random position
+    int random_number = rand() % 200;
+    // Create upper pipe
+    Enemy * upperPipe = new Enemy();
+    upperPipe->setTransformOriginPoint(upperPipe->pixmap().width()/2, upperPipe->pixmap().height()/2);
+    upperPipe->setRotation(180);
+    upperPipe->setPos(800,-200+random_number);
+    scene->addItem(upperPipe);
+    // create lower pipe + add into the scene
+    Enemy * lowerPipe = new Enemy();
+    lowerPipe->setPos(800,300+random_number);
+    scene->addItem(lowerPipe);
+    // create friend between 2 pipe + add into the scene
+    Friend * betweenSpace = new Friend();
+    betweenSpace->setPos(800,100+random_number);
+    scene->addItem(betweenSpace);
 }

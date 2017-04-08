@@ -30,11 +30,15 @@ void Enemy::move()
 {
     // set position
     setPos(x()-5,y());
-    // if bullet collide enemy, destroy both
-
+    // if enemy out of scene, destroy enemy
+    if(pos().x()<0)
+    {
+        scene()->removeItem(this);
+        delete this;
+    }
+    // if player collide enemy, destroy enemy
     QList<QGraphicsItem *> collide_item = collidingItems();
     for(int i=0, n= collide_item.size(); i<n;i++){
-
         if(typeid(* collide_item[i]) == typeid(Player)){
             //Decrease the health
             game->health->decrease();
